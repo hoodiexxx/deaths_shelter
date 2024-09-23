@@ -1,0 +1,45 @@
+---
+title: "My title"
+subtitle: "My subtitle if needed"
+author: 
+  - Rohan Alexander
+thanks: "Code and data are available at: LINK."
+date: today
+date-format: long
+abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
+format: pdf
+number-sections: true
+bibliography: references.bib
+---
+
+```{r}
+#| include: false
+#| warning: false
+#| message: false
+
+library(tidyverse)
+library(here)
+library(tinytex)
+library(dplyr)
+library(tibble)
+library(opendatatoronto)
+library(janitor)
+library(ggplot2)
+library(knitr)
+
+data <- read_csv(here::here("data/analysis_data/deaths_shelter_analysis_data.csv"))
+
+```
+
+
+# Introduction
+
+You can and should cross-reference sections and sub-sections. We use @talia, @opendatatorotno, and @rohan.
+
+The remainder of this paper is structured as follows. @sec-mydatasection
+
+\textcolor{red}{total number victims}: the total number of male and female victims
+
+
+
+
