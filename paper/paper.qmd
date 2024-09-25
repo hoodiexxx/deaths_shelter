@@ -2,12 +2,13 @@
 title: "My title"
 subtitle: "My subtitle if needed"
 author: 
-  - Rohan Alexander
+  - Colin Sihan Yang
 thanks: "Code and data are available at: LINK."
 date: today
 date-format: long
 abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
 format: pdf
+toc: true
 number-sections: true
 bibliography: references.bib
 ---
@@ -27,19 +28,153 @@ library(janitor)
 library(ggplot2)
 library(knitr)
 
-data <- read_csv(here::here("data/analysis_data/deaths_shelter_analysis_data.csv"))
+# Set the number of decimal places to 2 for all subsequent figures and tables.
+options(digits = 2)
+
+raw_data <- read_csv(here("data/raw_data/deaths_shelter.csv"))
+cleaned_data = read_csv(here("data/analysis_data/clean_deaths_shelter_data.csv"))
 
 ```
 
 
 # Introduction
 
-You can and should cross-reference sections and sub-sections. We use @talia, @opendatatorotno, and @rohan.
+The consideration of the increasing number of homeless people deaths in the City of Toronto has emerged as a core public health concern which portrays the harsh situation of the unaccommodated people. According to the studies that were recently published by the Toronto Public Health [@citeTPH],79 homeless persons were reported to die in the first six months of 2023, many of the deaths due to drug toxicity, an epidemic that has plagued the city [@citeTorontoMeida]. This mortality not only implicates the health consequences of use of drugs, but it also indicates systemic deficits in provision of safe facilities and healthcare services.
 
-The remainder of this paper is structured as follows. @sec-mydatasection
+The total deaths have reduced when compared to other years, however, among the total populations that are homeless, the population mortality remains very high comapred to the rest with the differences in death averages even more stunning for the median age at death for the homeless like the average male age is around sixty years and the average death age for women is in the Late 50’s[@citeTPH]. It also demonstrates that there is an apparent gap when it comes to devising public health policies to manage the risks posed by drug misuse in a matter of urgency and address the key requirements of housing and mental health in the long term[@citeTPH].
 
-\textcolor{red}{total number victims}: the total number of male and female victims
+A mix of plans like the Toronto Overdose Action Plan or the Integrated Prevention and Harm Reduction Initiative (iPHARE) aimed at minimization of these risks have been adopted by the city. Collectively, they have provided some harm reduction services and addressed some mental health needs of their clients as well. Although, the high mortality rates have remained persistent and there is a need to contextualize these strategies and more efforts from the provincial and federal governments to protect both the measures used in the city and those who need the city most.
+
+The study presented in this paper investigates the association between seasonal trends and the number of deaths recorded within Toronto's shelter system. This seasonal cycle could have some impact on the rate of deaths. The analysis implies that the government of Toronto could enhance its strategies and assistance of the homeless population based on these trends during certain months or seasons which are likely perceived to be problem new. Particularly, providing more medical care and better shelter conditions in the winter months will likely help to minimize deaths from the elements or some illnesses. In the same manner, increasing the availability of overdose and mental health treatment in times of distress or high drug use, sees in the time series data, could be helpful in mitigating some of the causes of the mortality in the region. This method would allow for adjusting the intervention to occurrence at the most needed periods, and remarkably, diminish the general mortality risks of the homeless toronto population in great proportions.
+
+The remainder of this paper is structured as follows. @sec-data discuss the raw data cleaning process, and offers a insight at the underlying distribution of data through tabular and graphical representations of the observations.
+
+<!-- \textcolor{red}{total number victims}: the total number of male and female victims -->
+
+# Data {#sec-data}
+
+## Raw Data
+
+The data used in this paper is sourced from Open Data Toronto and is load into this paper through the opendatatoronto library [@opendatatorotno]. The particular data set is used to analyze the deaths of Toronto shelter residents[@citeshelterdeaths]. All the data analysis was done through R [@citeR] with the aid of the following packages: tidyverse [@citetidyverse], here [@citehere], tinytex [@citetinytex], dplyr [@citedplyr], tibble [@citetibble], janitor[@citejanitor], ggplot2 [@citeggplot2], and knitr [@citeknitr].
+
+The data used is published by Toronto Shelter & Support Services, providing information about the deaths of shelter residents. The data used in this paper is up-to-date as of Sept 19, 2024, the raw data set features the total decedents with 212 observations and 7 attributes. The dataset includes the id, Year, Month, Total Decedents, Male, Female, Transgender/Non-Binary/two_spirit. A sample of the cleaned data can be seen in @tbl-cleaned-data and a bar grapgh showcasing every observation, by date of collection, can be seen in @fig-lead-samples-over-time.
 
 
+```{r}
+#| label: tbl-cleaned-data
+#| tbl-cap: Sample of cleaned lead data 
+#| echo: false
+
+head(cleaned_data, 6) |>
+  kable(
+    col.names = c("year", "month", "total_decedents"),
+    booktabs = TRUE
+    ) 
+```
+
+## Basic Summary Statistics of the Data
+
+@fig-clean-data-year-month-decedents-1 the bar graph that plot the total decendents in Toronto shelter vs the year between 2007 to 2024. We could observe a strong skew to the right pattern in the bar graph. The number of deaths dramatically increase and reach to the peak during 2019-2024 that is strongly overlap with the covid period.
+
+@fig-clean-data-year-month-decedents-2 the bar graph that show the total decedents in Toronto shelter vs the months from January to the December. it is worthy to mention that the number of death increase during winter season, for more specific, January and Feburary which the months that toronto usual have coldest weather. 
+
+```{r}
+#| label: fig-clean-data-year-month-decedents
+#| fig-cap: the total decedents vs year in shelter and the total decendets vs month in shelter
+#| echo: false
+#| fig-subcap: ["total decedents vs year","total decedents vs month"]
+#| layout-ncol: 2
+
+cleaned_data |>
+  ggplot(mapping = aes(x = year, y = total_decedents)) + 
+  geom_bar(stat = "identity")  +
+  theme_minimal() +
+  labs(
+    x = "Alarm Time", y = "Response Time",
+  )
+
+cleaned_data %>%
+  mutate(month = factor(month, levels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))) %>%
+  ggplot(mapping = aes(x = month, y = total_decedents)) + 
+  geom_bar(stat = "identity") +
+  theme_minimal() +
+  labs(
+    x = "Month", 
+    y = "Total Decedents"
+  )
+```
+
+@tbl-yearobservation the table shows the number of observation about each year toronto shelter deaths and we could see that 2007-2023 got 12 months observations while the 2024 only got 8 observations that is because the data used in this paper is up-to-date as of Sept 19, 2024.
+
+```{r}
+#| label: tbl-yearobservation
+#| tbl-cap: Number of observations by year
+#| echo: false
+cleaned_data |>
+  group_by(year) |>
+  summarize(count = n()) |>
+  kable(col.names = c("Year of Sample Collection", "Number of Observations"))
+```
+
+@tbl-mean-sd
+```{r}
+#| label: tbl-mean-sd
+#| tbl-cap: Mean and standard deviation of all observed decedents
+#| echo: false
+
+cleaned_data |>
+  summarize(
+    mean_total_decedents = sprintf("%.2f", mean(total_decedents)),
+    sd_total_decedents = sprintf("%.2f", sd(total_decedents))
+    ) |>
+  kable(
+    col.names = c("Mean total decedents" ,"standard deviation of total decedents")
+    )
+```
+
+
+```{r}
+#| label: fig-boxplot
+#| fig-cap: boxplot for the distribution of observed Toronto shelter decedents
+#| echo: false
+
+cleaned_data |>
+  ggplot(aes(x = "", y = total_decedents)) +
+  geom_boxplot() +
+  labs(y = "total_decedents", x = "") + 
+  theme_classic()
+```
+
+
+# Discussion
+
+## First discussion point {#sec-first-point}
+
+If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this. 
+
+## Second discussion point
+
+## Third discussion point
+
+## Weaknesses and next steps
+
+Weaknesses and next steps should also be included.
+
+\newpage
+
+\appendix
+
+# Appendix {-}
+
+
+# Additional data details
+
+
+
+\newpage
+
+
+# References
 
 

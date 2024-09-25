@@ -22,4 +22,4 @@ cleaned_data = cleaned_data %>% select(year, month, total_decedents)
 #   mutate(transgender_non_binary_two_spirit = case_when(transgender_non_binary_two_spirit == "n/a" ~ 0L, TRUE ~ as.integer(transgender_non_binary_two_spirit)))
 
 #### Save data ####
-write_csv(cleaned_data, "data/analysis_data/deaths_shelter_analysis_data.csv")
+write_csv(cleaned_data, "data/analysis_data/clean_deaths_shelter_data.csv")
