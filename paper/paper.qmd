@@ -39,7 +39,7 @@ cleaned_data = read_csv(here("data/analysis_data/clean_deaths_shelter_data.csv")
 
 # Introduction
 
-The consideration of the increasing number of homeless people deaths in the City of Toronto has emerged as a core public health concern which portrays the harsh situation of the unaccommodated people. According to the studies that were recently published by the Toronto Public Health [@citeTPH],79 homeless persons were reported to die in the first six months of 2023, many of the deaths due to drug toxicity, an epidemic that has plagued the city [@citeTorontoMeida]. This mortality not only implicates the health consequences of use of drugs, but it also indicates systemic deficits in provision of safe facilities and healthcare services.
+The increasing number of homeless people deaths in the City of Toronto has emerged as a core public health concern which portrays the harsh situation of the unaccommodated people. According to the studies that were recently published by the Toronto Public Health [@citeTPH],79 homeless persons were reported to die in the first six months of 2023, many of the deaths due to diease, flu, and epidemic that has plagued the city [@citeTorontoMeida]. This mortality not only implicates the health consequences of diease, but it also indicates systemic deficits in provision of safe facilities and healthcare services.
 
 The increasing rates of homelessness coupled with the complexity of health issues faced by this population present a critical challenge for urban centers worldwide. Toronto, Canada's largest city, exemplifies this challenge, with a significant homeless population reliant on the shelter system. Recent trends and emerging data suggest that the mortality rate among these individuals is influenced by both environmental factors, such as harsh winter conditions, and systemic pressures including public health crises like the COVID-19 pandemic, drawing on open data from the period 2007 to 2024 provided by Open Data Toronto.[@citeTPH]. It also demonstrates that there is an apparent gap when it comes to devising public health policies to manage the risks posed by drug misuse in a matter of urgency and address the key requirements of housing and Epidemiological sanitary conditions in the long term[@citeTPH].
 
@@ -97,7 +97,7 @@ cleaned_data |>
   geom_bar(stat = "identity")  +
   theme_minimal() +
   labs(
-    x = "Alarm Time", y = "Response Time",
+    x = "Year", y = "Total Decedents",
   )
 
 cleaned_data %>%
