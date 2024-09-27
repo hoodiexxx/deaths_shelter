@@ -3,10 +3,10 @@ title: "My title"
 subtitle: "My subtitle if needed"
 author: 
   - Colin Sihan Yang
-thanks: "Code and data are available at: LINK."
+thanks: "Code and data are available at: https://github.com/hoodiexxx/deaths_shelter."
 date: today
 date-format: long
-abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
+abstract: "This study explores the seasonal patterns and the deaths of the homeless people who are under the roof of the shelter system in Toronto. The research encompasses the deaths among the shelter residents and conducts analysis for 2007-2024 basing on open data material received from Open Data Toronto. It does have a particular diligence when winter months regime with death increase is noted while also establishing the effect of the COVID-19 pandemic on the ever rising death rates between the years 2019 and 2024. The results underscore the need for targeted health strategies particularly related to medical, and psychiatric services and shelter improvements in vulnerable periods."
 format: pdf
 toc: true
 number-sections: true
@@ -41,11 +41,11 @@ cleaned_data = read_csv(here("data/analysis_data/clean_deaths_shelter_data.csv")
 
 The consideration of the increasing number of homeless people deaths in the City of Toronto has emerged as a core public health concern which portrays the harsh situation of the unaccommodated people. According to the studies that were recently published by the Toronto Public Health [@citeTPH],79 homeless persons were reported to die in the first six months of 2023, many of the deaths due to drug toxicity, an epidemic that has plagued the city [@citeTorontoMeida]. This mortality not only implicates the health consequences of use of drugs, but it also indicates systemic deficits in provision of safe facilities and healthcare services.
 
-The total deaths have reduced when compared to other years, however, among the total populations that are homeless, the population mortality remains very high comapred to the rest with the differences in death averages even more stunning for the median age at death for the homeless like the average male age is around sixty years and the average death age for women is in the Late 50’s[@citeTPH]. It also demonstrates that there is an apparent gap when it comes to devising public health policies to manage the risks posed by drug misuse in a matter of urgency and address the key requirements of housing and mental health in the long term[@citeTPH].
+The increasing rates of homelessness coupled with the complexity of health issues faced by this population present a critical challenge for urban centers worldwide. Toronto, Canada's largest city, exemplifies this challenge, with a significant homeless population reliant on the shelter system. Recent trends and emerging data suggest that the mortality rate among these individuals is influenced by both environmental factors, such as harsh winter conditions, and systemic pressures including public health crises like the COVID-19 pandemic, drawing on open data from the period 2007 to 2024 provided by Open Data Toronto.[@citeTPH]. It also demonstrates that there is an apparent gap when it comes to devising public health policies to manage the risks posed by drug misuse in a matter of urgency and address the key requirements of housing and Epidemiological sanitary conditions in the long term[@citeTPH].
 
 A mix of plans like the Toronto Overdose Action Plan or the Integrated Prevention and Harm Reduction Initiative (iPHARE) aimed at minimization of these risks have been adopted by the city. Collectively, they have provided some harm reduction services and addressed some mental health needs of their clients as well. Although, the high mortality rates have remained persistent and there is a need to contextualize these strategies and more efforts from the provincial and federal governments to protect both the measures used in the city and those who need the city most.
 
-The study presented in this paper investigates the association between seasonal trends and the number of deaths recorded within Toronto's shelter system. This seasonal cycle could have some impact on the rate of deaths. The analysis implies that the government of Toronto could enhance its strategies and assistance of the homeless population based on these trends during certain months or seasons which are likely perceived to be problem new. Particularly, providing more medical care and better shelter conditions in the winter months will likely help to minimize deaths from the elements or some illnesses. In the same manner, increasing the availability of overdose and mental health treatment in times of distress or high drug use, sees in the time series data, could be helpful in mitigating some of the causes of the mortality in the region. This method would allow for adjusting the intervention to occurrence at the most needed periods, and remarkably, diminish the general mortality risks of the homeless toronto population in great proportions.
+The study presented in this paper investigates the association between seasonal trends and the number of deaths recorded within Toronto's shelter system. This seasonal cycle could have some impact on the rate of deaths. The analysis implies that the government of Toronto could enhance its strategies and assistance of the homeless population based on these trends during certain months or seasons which are likely perceived to be problem new. Particularly, providing more medical care and better shelter conditions in the winter months will likely help to minimize deaths from the elements or some illnesses. In a similar way, increasing the availability of COVID-19 testing, vaccinations, and treatment during periods of heightened transmission, as seen in time series data, could significantly help in mitigating the spread of the virus. This method would allow for adjusting public health interventions to peak transmission times, ultimately reducing the infection rate and lowering the general health risks for vulnerable populations, such as the elderly and those with pre-existing conditions. By strategically focusing resources on critical moments, we could dramatically lessen the overall impact of the pandemic, both in terms of hospitalizations and mortality rates.
 
 The remainder of this paper is structured as follows. @sec-data discuss the raw data cleaning process, and offers a insight at the underlying distribution of data through tabular and graphical representations of the observations.
 
@@ -58,6 +58,13 @@ The remainder of this paper is structured as follows. @sec-data discuss the raw 
 The data used in this paper is sourced from Open Data Toronto and is load into this paper through the opendatatoronto library [@opendatatorotno]. The particular data set is used to analyze the deaths of Toronto shelter residents[@citeshelterdeaths]. All the data analysis was done through R [@citeR] with the aid of the following packages: tidyverse [@citetidyverse], here [@citehere], tinytex [@citetinytex], dplyr [@citedplyr], tibble [@citetibble], janitor[@citejanitor], ggplot2 [@citeggplot2], and knitr [@citeknitr].
 
 The data used is published by Toronto Shelter & Support Services, providing information about the deaths of shelter residents. The data used in this paper is up-to-date as of Sept 19, 2024, the raw data set features the total decedents with 212 observations and 7 attributes. The dataset includes the id, Year, Month, Total Decedents, Male, Female, Transgender/Non-Binary/two_spirit. A sample of the cleaned data can be seen in @tbl-cleaned-data and a bar grapgh showcasing every observation, by date of collection, can be seen in @fig-lead-samples-over-time.
+
+## Clean Data
+Measurement: First, pipe the data into the janitor to unify the column attributes name, to avoid Uppercases and other special symbol that are hard to deal with. Secondly, extract the specific attributes we focus in this paper by using "select" method. Finally, write down the clean dataset from the RAM into SSD by using "write_csv" for the future usage.
+
+the clean data has 212 rows x 3 columns(year, month, total_decedents)
+
+
 
 
 ```{r}
@@ -117,7 +124,7 @@ cleaned_data |>
   kable(col.names = c("Year of Sample Collection", "Number of Observations"))
 ```
 
-@tbl-mean-sd
+@tbl-mean-sd the table show the Mean of response variable total decedents and the standard deviation of response variable total decedents.
 ```{r}
 #| label: tbl-mean-sd
 #| tbl-cap: Mean and standard deviation of all observed decedents
@@ -133,6 +140,15 @@ cleaned_data |>
     )
 ```
 
+@fig-boxplot This boxplot illustrates the distribution of total decedents observed at Toronto shelters. Here's a breakdown of its components:
+
+- Median: The line inside the box represents the median number of decedents, which appears to be around 3 or 4.
+
+- Interquartile Range (IQR): The box itself spans from the first quartile (Q1) to the third quartile (Q3), encompassing the middle 50% of the data. It appears to range from about 2 to 5 decedents.
+
+- Whiskers: The whiskers extend from the edges of the box to the minimum and maximum values within 1.5 times the IQR from the first and third quartiles, respectively. Here, the lower whisker appears to start at 0 (indicating the minimum), and the upper whisker extends up to around 7 or 8.
+
+- Outliers: Points outside the range of the whiskers are considered outliers. These are shown as individual dots above the upper whisker. In this plot, there are several outliers, with the highest value around 15 decedents.
 
 ```{r}
 #| label: fig-boxplot
