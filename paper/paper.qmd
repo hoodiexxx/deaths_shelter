@@ -1,6 +1,5 @@
 ---
-title: "My title"
-subtitle: "My subtitle if needed"
+title: "Toronto Shelter Analysis: A Deep Dive of  Shelter Total Decedents with Features in Real Life"
 author: 
   - Colin Sihan Yang
 thanks: "Code and data are available at: https://github.com/hoodiexxx/deaths_shelter."
@@ -39,11 +38,9 @@ cleaned_data = read_csv(here("data/analysis_data/clean_deaths_shelter_data.csv")
 
 # Introduction
 
-The increasing number of homeless people deaths in the City of Toronto has emerged as a core public health concern which portrays the harsh situation of the unaccommodated people. According to the studies that were recently published by the Toronto Public Health [@citeTPH],79 homeless persons were reported to die in the first six months of 2023, many of the deaths due to diease, flu, and epidemic that has plagued the city [@citeTorontoMeida]. This mortality not only implicates the health consequences of diease, but it also indicates systemic deficits in provision of safe facilities and healthcare services.
+The increasing number of homeless people deaths in the City of Toronto has emerged as a core public health concern which portrays the harsh situation of the unaccommodated people. According to the studies that were recently published by the Toronto Public Health [@citeTPH], 79 homeless persons were reported to die in the first six months of 2023, many of the deaths due to diease, flu, and epidemic that has plagued the city [@citeTorontoMeida]. This mortality not only implicates the health consequences of diease, but it also indicates systemic deficits in provision of safe facilities and healthcare services.
 
-The increasing rates of homelessness coupled with the complexity of health issues faced by this population present a critical challenge for urban centers worldwide. Toronto, Canada's largest city, exemplifies this challenge, with a significant homeless population reliant on the shelter system. Recent trends and emerging data suggest that the mortality rate among these individuals is influenced by both environmental factors, such as harsh winter conditions, and systemic pressures including public health crises like the COVID-19 pandemic, drawing on open data from the period 2007 to 2024 provided by Open Data Toronto.[@citeTPH]. It also demonstrates that there is an apparent gap when it comes to devising public health policies to manage the risks posed by drug misuse in a matter of urgency and address the key requirements of housing and Epidemiological sanitary conditions in the long term[@citeTPH].
-
-A mix of plans like the Toronto Overdose Action Plan or the Integrated Prevention and Harm Reduction Initiative (iPHARE) aimed at minimization of these risks have been adopted by the city. Collectively, they have provided some harm reduction services and addressed some mental health needs of their clients as well. Although, the high mortality rates have remained persistent and there is a need to contextualize these strategies and more efforts from the provincial and federal governments to protect both the measures used in the city and those who need the city most.
+The increasing rates of homelessness coupled with the complexity of health issues faced by this population present a critical challenge for urban centers worldwide. Toronto, Canada's largest city, exemplifies this challenge, with a significant homeless population reliant on the shelter system. Recent trends and emerging data suggest that the mortality rate among these individuals is influenced by both environmental factors, such as harsh winter conditions, and systemic pressures including public health crises like the COVID-19 pandemic, drawing on open data from the period 2007 to 2024 provided by Open Data Toronto[@citeTPH]. It also demonstrates that there is an apparent gap when it comes to devising public health policies to manage the risks in a matter of urgency and address the key requirements of housing and Epidemiological sanitary conditions in the long term [@citeTPH].
 
 The study presented in this paper investigates the association between seasonal trends and the number of deaths recorded within Toronto's shelter system. This seasonal cycle could have some impact on the rate of deaths. The analysis implies that the government of Toronto could enhance its strategies and assistance of the homeless population based on these trends during certain months or seasons which are likely perceived to be problem new. Particularly, providing more medical care and better shelter conditions in the winter months will likely help to minimize deaths from the elements or some illnesses. In a similar way, increasing the availability of COVID-19 testing, vaccinations, and treatment during periods of heightened transmission, as seen in time series data, could significantly help in mitigating the spread of the virus. This method would allow for adjusting public health interventions to peak transmission times, ultimately reducing the infection rate and lowering the general health risks for vulnerable populations, such as the elderly and those with pre-existing conditions. By strategically focusing resources on critical moments, we could dramatically lessen the overall impact of the pandemic, both in terms of hospitalizations and mortality rates.
 
@@ -55,21 +52,21 @@ The remainder of this paper is structured as follows. @sec-data discuss the raw 
 
 ## Raw Data
 
-The data used in this paper is sourced from Open Data Toronto and is load into this paper through the opendatatoronto library [@opendatatorotno]. The particular data set is used to analyze the deaths of Toronto shelter residents[@citeshelterdeaths]. All the data analysis was done through R [@citeR] with the aid of the following packages: tidyverse [@citetidyverse], here [@citehere], tinytex [@citetinytex], dplyr [@citedplyr], tibble [@citetibble], janitor[@citejanitor], ggplot2 [@citeggplot2], and knitr [@citeknitr].
+The data used in this paper is sourced from Open Data Toronto and is load into this paper through the opendatatoronto library [@opendatatorotno]. The particular data set is used to analyze the deaths of Toronto shelter residents [@citeshelterdeaths]. All the data analysis was done through R [@citeR] with the aid of the following packages: tidyverse [@citetidyverse], here [@citehere], tinytex [@citetinytex], dplyr [@citedplyr], tibble [@citetibble], janitor [@citejanitor], ggplot2 [@citeggplot2], and knitr [@citeknitr].
 
-The data used is published by Toronto Shelter & Support Services, providing information about the deaths of shelter residents. The data used in this paper is up-to-date as of Sept 19, 2024, the raw data set features the total decedents with 212 observations and 7 attributes. The dataset includes the id, Year, Month, Total Decedents, Male, Female, Transgender/Non-Binary/two_spirit. A sample of the cleaned data can be seen in @tbl-cleaned-data and a bar grapgh showcasing every observation, by date of collection, can be seen in @fig-lead-samples-over-time.
+The data used is published by Toronto Shelter & Support Services, providing information about the deaths of shelter residents. The data used in this paper is up-to-date as of Sept 19, 2024, the raw data set features the total decedents with 212 observations and 7 attributes. The dataset includes the id, Year, Month, Total Decedents, Male, Female, Transgender/Non-Binary/two_spirit. A sample of the cleaned data can be seen in @tbl-cleaned-data and a bar grapgh showcasing every observation, by date of collection, can be seen in @fig-clean-data-year-month-decedents.
 
 ## Clean Data
 Measurement: First, pipe the data into the janitor to unify the column attributes name, to avoid Uppercases and other special symbol that are hard to deal with. Secondly, extract the specific attributes we focus in this paper by using "select" method. Finally, write down the clean dataset from the RAM into SSD by using "write_csv" for the future usage.
 
-the clean data has 212 rows x 3 columns(year, month, total_decedents)
+the clean data has 212 rows x 3 columns (year, month, total_decedents)
 
 
 
 
 ```{r}
 #| label: tbl-cleaned-data
-#| tbl-cap: Sample of cleaned lead data 
+#| tbl-cap: Sample of cleaned shelter death data 
 #| echo: false
 
 head(cleaned_data, 6) |>
@@ -158,24 +155,40 @@ cleaned_data |>
 cleaned_data |>
   ggplot(aes(x = "", y = total_decedents)) +
   geom_boxplot() +
-  labs(y = "total_decedents", x = "") + 
+  labs(y = "total decedents", x = "") + 
   theme_classic()
 ```
 
 
 # Discussion
 
-## First discussion point {#sec-first-point}
+## Major Conclusions and Their Effects
 
-If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this. 
+The evaluation of Toronto shelter decedent data in the years 2007–2024 makes it possible to expose the significance of environmental and public health factors in the overall mortality rates among the homeless population. One critical point is the recurring death rates when there is a persistent and severe cold, especially in January and February. There is a clear justification about the level of health and shelter provision that is needed during these months and it provides health services and shelter that have better insulations and heaters among other therapeutic care.
 
-## Second discussion point
+The COVID-19 pandemic has changed mostly attributed to the suffering increases which caused deaths in the shelter decedent data during 2019-2024 which is evident. This correlates with wider public health data with respect to covid where unfortunate incidence bashed on the covid vulnerable people. A set of conditions comprising homelessness, lower health standards and elevated incidence of Covid 19 created a health emergency such as is demonstrated by this dataset.
 
-## Third discussion point
+## Health Services and Seasonal Strategies
 
-## Weaknesses and next steps
+The seasonal variation of mortality rates in Toronto shelters complements the rationale for public health intervention. As per the results, policy options should be directed at increasing healthcare systems support at the end of the winter season. This might include deploying more mobile health units, expanding the emergency shelter system, and assuring that seasonal health related services such as flu shots and respiratory health clinical services are in ready at the location of the shelter throughout the cold months.
 
-Weaknesses and next steps should also be included.
+Moreover, shelter conditions should be improved against hostile environments especially winter season. Insulating the shelters and providing sufficient heat is important as if not many fatalities would be from avoidable reasons such as cold exposure. Achieving the trends discussed and recommended in this analysis would give the bridge that includes the ways of ensuring that the government makes appropriate expenditure during the vulnerable months and saves lives in the process.
+
+## Influence of the COVID–19 Pandemic
+
+It was clear from the analysis, that there was a surge in deaths within the shelter facilities, especially, during the years 2019 – 2024, which was unprecedented within the analysis period. The increase in shelter deaths during these periods as at the apex of the pandemic indicates that, these health services could not provide assistance to these people in the best way. In the middle of a pandemic, the homeless were placed in a precarious situation, living in congregate settings, requiring and often not getting healthcare, and having multiple chronic conditions – this was the conditions that COVID19 catalyzed. The data demonstrates the lessons that should be learned regarding the management of public health interventions at the onset of protest movements in order to leverage better leadership at the beginning of the protests.
+
+From here-on, it is imperative that the long term plans for the provision of public health and shelter services in Toronto includes pandemic preparedness. This would be about guaranteeing that shelter establishments are built to allow for social distancing, that stockpiling of PPE, sanitation supplies and equipment is done, and that there is a well-organized infrastructure to conduct medical intervention for the homeless people such as vaccination campaigns at the invocation of a public health emergency.
+
+## Weaknesses and Next Steps
+
+it has to be said that this study is not without limitations. Most importantly, the dataset does not provide specifics on the individual healthy condition, causes of mortality, and other interfacing attributes such as surrounding conditions (e.g. temperatures and so on, along the same lines as shelter conditions).” In the analysis presented here, future development would make it possible by doing detailed death field causation or institutional studies of correlating temperature data to deaths on raising the fatality during extreme cold days.
+
+Further, the dataset does not review what measures were taken by the city in the way of the interventions under review. Posterity may consider the tracking of some public health interventions and the betterment of shelters as variables accounting the variations in deaths to assess the impact of various strategies aimed at the cutting down of deaths. In addition, comparisons of data on shelter decedents from other cities where stronger measures such as providing additional cold weather shelters have been implemented may help to clarify which interventions are effective in achieving which results.
+
+Finally, among the factors related to homelessness and its consequences – disease and premature death of the homeless – the comprehensive research would include the investigation of substance and mental health services optimization. Exploring how the realization of access to psychiatric and addiction treatment is beneficial on the mortality rates would be an additional tool on how to minimize the threats of shelter residents.
+
+In summary, this study makes it evident that it is absolutely necessary to implement target, seasonal and health measures in order to lower mortality rates in shelters located within the city of Toronto. There are indeed lessons to be learnt from the impact of the COVID-19 pandemic in terms of preparedness and adaptability that can be applied in the future public health strategies targeting the vulnerable population.
 
 \newpage
 
@@ -183,8 +196,6 @@ Weaknesses and next steps should also be included.
 
 # Appendix {-}
 
-
-# Additional data details
 
 
 
