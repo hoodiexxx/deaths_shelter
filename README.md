@@ -19,5 +19,5 @@ The repo is structured as:
 
 ## Statement on LLM usage
 
-some part of code were written with the help of Chatgpt and the entire chat history is available in inputs/llms/usage.txt.
+some part of code were written with the help of Chatgpt and the entire chat history is available in other/llms/usage.txt.
 
